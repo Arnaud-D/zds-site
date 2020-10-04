@@ -454,4 +454,4 @@ class TopicFollowed(models.Model):
 
 # used to fix Django 1.9 Warning
 # https://github.com/zestedesavoir/zds-site/issues/3451
-from . import receivers  # noqa
+# from . import receivers  # noqa

@@ -15,6 +15,7 @@ from django.views.generic import ListView, FormView
 
 from zds.member.decorator import LoginRequiredMixin, PermissionRequiredMixin, LoggedWithReadWriteHability
 from zds.mp.models import mark_read
+from zds.tutorialv2 import signals
 from zds.tutorialv2.forms import (
     AskValidationForm,
     RejectValidationForm,
@@ -185,6 +186,9 @@ class AskValidationForContent(LoggedWithReadWriteHability, SingleContentFormView
         self.object.save()
 
         messages.success(self.request, _("Votre demande de validation a été transmise à l'équipe."))
+        signals.validation_requested.send(
+            sender=self.__class__, content=validation.content, performer=self.request.user, version=validation.version
+        )
 
         self.success_url = self.versioned_object.get_absolute_url(version=self.sha)
         return super(AskValidationForContent, self).form_valid(form)
@@ -267,7 +271,9 @@ class CancelValidation(LoginRequiredMixin, ModalFormView):
                 send_message_mp(bot, validation.content.validation_private_message, msg)
 
         messages.info(self.request, _("La validation de ce contenu a bien été annulée."))
-
+        signals.validation_canceled.send(
+            sender=self.__class__, content=validation.content, performer=self.request.user, version=validation.version
+        )
         self.success_url = (
             reverse("content:view", args=[validation.content.pk, validation.content.slug])
             + "?version="
@@ -290,6 +296,9 @@ class ReserveValidation(LoginRequiredMixin, PermissionRequiredMixin, FormView):
             validation.status = "PENDING"
             validation.save()
             messages.info(request, _("Ce contenu n'est plus réservé."))
+            signals.validation_unreserved.send(
+                sender=self.__class__, content=validation.content, performer=request.user, version=validation.version
+            )
             return redirect(reverse("validation:list"))
         else:
             validation.validator = request.user
@@ -329,6 +338,9 @@ class ReserveValidation(LoginRequiredMixin, PermissionRequiredMixin, FormView):
                 mark_read(validation.content.validation_private_message, validation.validator)
 
             messages.info(request, _("Ce contenu a bien été réservé par {0}.").format(request.user.username))
+            signals.validation_reserved.send(
+                sender=self.__class__, content=validation.content, performer=request.user, version=validation.version
+            )
 
             return redirect(
                 reverse("content:view", args=[validation.content.pk, validation.content.slug])
@@ -425,6 +437,9 @@ class RejectValidation(LoginRequiredMixin, PermissionRequiredMixin, ModalFormVie
 
         messages.info(self.request, _("Le contenu a bien été refusé."))
         self.success_url = reverse("validation:list")
+        signals.validation_rejected.send(
+            sender=self.__class__, content=validation.content, performer=self.request.user, version=validation.version
+        )
         return super(RejectValidation, self).form_valid(form)
 
 
@@ -483,6 +498,12 @@ class AcceptValidation(LoginRequiredMixin, PermissionRequiredMixin, ModalFormVie
             notify_update(db_object, is_update, form.cleaned_data["is_major"])
 
             messages.success(self.request, _("Le contenu a bien été validé."))
+            signals.validation_accepted.send(
+                sender=self.__class__,
+                content=validation.content,
+                performer=self.request.user,
+                version=validation.version,
+            )
             self.success_url = published.get_absolute_url_online()
 
         return super(AcceptValidation, self).form_valid(form)
@@ -561,7 +582,9 @@ class RevokeValidation(LoginRequiredMixin, PermissionRequiredMixin, SingleOnline
 
         messages.success(self.request, _("Le contenu a bien été dépublié."))
         self.success_url = self.versioned_object.get_absolute_url() + "?version=" + validation.version
-
+        signals.validation_revoked.send(
+            sender=self.__class__, content=validation.content, performer=self.request.user, version=validation.version
+        )
         return super(RevokeValidation, self).form_valid(form)
 
 

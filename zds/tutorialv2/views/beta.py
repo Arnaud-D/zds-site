@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from zds.forum.models import Topic, Forum, mark_read
 from zds.member.decorator import LoggedWithReadWriteHability
 from zds.notification.models import TopicAnswerSubscription
+from zds.tutorialv2 import signals
 from zds.tutorialv2.forms import BetaForm
 from zds.tutorialv2.mixins import SingleContentFormViewMixin
 from zds.tutorialv2.models.database import PublishableContent
@@ -93,6 +94,9 @@ class ManageBetaContent(LoggedWithReadWriteHability, SingleContentFormViewMixin)
             )
             send_post(self.request, topic, self.request.user, msg_post)
             lock_topic(topic)
+            signals.beta_deactivated.send(
+                sender=self.__class__, content=self.object, performer=self.request.user, version=sha_beta
+            )
 
         elif self.action == "set":
             already_in_beta = self.object.in_beta()
@@ -188,6 +192,10 @@ class ManageBetaContent(LoggedWithReadWriteHability, SingleContentFormViewMixin)
                 for tag in all_tags:
                     topic.tags.add(tag)
                 topic.save()
+
+            signals.beta_activated.send(
+                sender=self.__class__, content=self.object, performer=self.request.user, version=sha_beta
+            )
 
         self.object.save()  # we should prefer .update but it needs a huge refactoring
 

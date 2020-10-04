@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from zds.gallery.models import UserGallery, GALLERY_WRITE
 from zds.member.decorator import LoggedWithReadWriteHability
+from zds.tutorialv2 import signals
 
 from zds.tutorialv2.forms import AuthorForm, RemoveAuthorForm
 from zds.tutorialv2.mixins import SingleContentFormViewMixin
@@ -66,6 +67,9 @@ class AddAuthorToContent(LoggedWithReadWriteHability, SingleContentFormViewMixin
                         hat=get_hat_from_settings("validation"),
                     )
                 UserGallery(gallery=self.object.gallery, user=user, mode=GALLERY_WRITE).save()
+                signals.author_added.send(
+                    sender=self.__class__, content=self.object, performer=self.request.user, author=user
+                )
         self.object.save()
         self.success_url = self.object.get_absolute_url()
 
@@ -121,6 +125,9 @@ class RemoveAuthorFromContent(LoggedWithReadWriteHability, SingleContentFormView
             if RemoveAuthorFromContent.remove_author(self.object, user):
                 if user.pk == self.request.user.pk:
                     current_user = True
+                signals.author_removed.send(
+                    sender=self.__class__, content=self.object, performer=self.request.user, author=user
+                )
             else:  # if user is incorrect or alone
                 messages.error(
                     self.request,
