@@ -450,19 +450,18 @@ class ContentTests(TutorialTestMixin, TestCase):
         old_description = article.public_version.description()
         article.licence = LicenceFactory()
         article.save()
-        self.assertEqual(
-            self.client.login(
-                username=self.user_author.username,
-                password='hostel77'),
-            True)
-        self.client.post(reverse('content:edit', args=[article.pk, article.slug]), {
-            'title': old_title + 'bla',
-            'type': 'ARTICLE',
-            'licence': article.licence.pk,
-            'subcategory': SubCategoryFactory().pk,
-            'last_hash': article.sha_draft
-        })
-        article = PublishableContent.objects.prefetch_related('public_version').get(pk=article.pk)
+        self.assertEqual(self.client.login(username=self.user_author.username, password="hostel77"), True)
+        self.client.post(
+            reverse("content:edit", args=[article.pk, article.slug]),
+            {
+                "title": old_title + "bla",
+                "type": "ARTICLE",
+                "licence": article.licence.pk,
+                "subcategory": SubCategoryFactory().pk,
+                "last_hash": article.sha_draft,
+            },
+        )
+        article = PublishableContent.objects.prefetch_related("public_version").get(pk=article.pk)
         article.public_version.load_public_version()
         self.assertEqual(old_title, article.public_version.title())
         self.assertEqual(old_description, article.public_version.description())
