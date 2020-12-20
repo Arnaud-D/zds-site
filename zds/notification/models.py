@@ -450,8 +450,3 @@ class TopicFollowed(models.Model):
 
     def __str__(self):
         return '<Sujet "{0}" suivi par {1}>'.format(self.topic.title, self.user.username)
-
-
-# used to fix Django 1.9 Warning
-# https://github.com/zestedesavoir/zds-site/issues/3451
-# from . import receivers  # noqa
