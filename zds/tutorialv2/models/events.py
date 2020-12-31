@@ -38,6 +38,8 @@ from zds.tutorialv2.views.validations_contents import (
 
 
 # Map signals to event types
+from zds.tutorialv2.views.validations_opinions import PublishOpinion, UnpublishOpinion
+
 types = {
     # Author management
     signals.author_added: "author_added",
@@ -65,6 +67,9 @@ types = {
     signals.help_modified: "help_modified",
     # JSFiddle management
     signals.jsfiddle_modified: "jsfiddle_modified",
+    # Opinion publication management
+    signals.opinion_published: "opinion_published",
+    signals.opinion_unpublished: "opinion_unpublished",
 }
 
 
@@ -227,6 +232,18 @@ def describe_jsfiddle_modified(event):
     )
 
 
+def describe_opinion_published(event):
+    return _('<a href="{}">{}</a> a publié le billet.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
+def describe_opinion_unpublished(event):
+    return _('<a href="{}">{}</a> a dépublié le billet.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
 # Map event types to descriptors
 descriptors = {
     "author_added": describe_author_added,
@@ -247,6 +264,8 @@ descriptors = {
     "suggestion_removed": describe_suggestion_removed,
     "help_modified": describe_help_modified,
     "jsfiddle_modified": describe_jsfiddle_modified,
+    "opinion_published": describe_opinion_published,
+    "opinion_unpublished": describe_opinion_unpublished,
 }
 
 
@@ -322,7 +341,7 @@ def record_event_suggestion_management(sender, performer, signal, content, **_):
 
 
 @receiver(signals.help_modified, sender=ChangeHelp)
-def record_help_management(sender, performer, signal, content, **_):
+def record_event_help_management(sender, performer, signal, content, **_):
     Event(
         performer=performer,
         type=types[signal],
@@ -331,7 +350,17 @@ def record_help_management(sender, performer, signal, content, **_):
 
 
 @receiver(signals.jsfiddle_modified, sender=ActivateJSFiddleInContent)
-def record_jsfiddle_management(sender, performer, signal, content, **_):
+def record_event_jsfiddle_management(sender, performer, signal, content, **_):
+    Event(
+        performer=performer,
+        type=types[signal],
+        content=content,
+    ).save()
+
+
+@receiver(signals.opinion_published, sender=PublishOpinion)
+@receiver(signals.opinion_unpublished, sender=UnpublishOpinion)
+def record_event_opinion_publication_management(sender, performer, signal, content, **_):
     Event(
         performer=performer,
         type=types[signal],

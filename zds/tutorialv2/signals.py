@@ -48,3 +48,8 @@ help_modified = Signal()
 # JSFiddle management
 # For the signal below, the arguments "performer" and "content"  shall be provided.
 jsfiddle_modified = Signal()
+
+# Opinion publication management
+# For the signals below, the arguments "performer" and "content"  shall be provided.
+opinion_published = Signal()
+opinion_unpublished = Signal()
