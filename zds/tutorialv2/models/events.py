@@ -17,6 +17,7 @@ from zds.tutorialv2.views.validations_contents import (
     RejectValidation,
     AcceptValidation,
     RevokeValidation,
+    ActivateJSFiddleInContent,
 )
 
 # Notes on addition/deletion/update of managed signals
@@ -62,6 +63,8 @@ types = {
     signals.suggestion_removed: "suggestion_removed",
     # Help management
     signals.help_modified: "help_modified",
+    # JSFiddle management
+    signals.jsfiddle_modified: "jsfiddle_modified",
 }
 
 
@@ -218,6 +221,12 @@ def describe_help_modified(event):
     )
 
 
+def describe_jsfiddle_modified(event):
+    return _('<a href="{}">{}</a> a modifié l\'activation de JSFiddle.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
 # Map event types to descriptors
 descriptors = {
     "author_added": describe_author_added,
@@ -237,6 +246,7 @@ descriptors = {
     "suggestion_added": describe_suggestion_added,
     "suggestion_removed": describe_suggestion_removed,
     "help_modified": describe_help_modified,
+    "jsfiddle_modified": describe_jsfiddle_modified,
 }
 
 
@@ -313,6 +323,15 @@ def record_event_suggestion_management(sender, performer, signal, content, **_):
 
 @receiver(signals.help_modified, sender=ChangeHelp)
 def record_help_management(sender, performer, signal, content, **_):
+    Event(
+        performer=performer,
+        type=types[signal],
+        content=content,
+    ).save()
+
+
+@receiver(signals.jsfiddle_modified, sender=ActivateJSFiddleInContent)
+def record_jsfiddle_management(sender, performer, signal, content, **_):
     Event(
         performer=performer,
         type=types[signal],

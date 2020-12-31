@@ -44,3 +44,7 @@ suggestion_removed = Signal()
 # Help management
 # For the signal below, the arguments "performer" and "content"  shall be provided.
 help_modified = Signal()
+
+# JSFiddle management
+# For the signal below, the arguments "performer" and "content"  shall be provided.
+jsfiddle_modified = Signal()

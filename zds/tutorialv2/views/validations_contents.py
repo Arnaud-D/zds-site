@@ -38,6 +38,7 @@ from zds.tutorialv2.publication_utils import (
     FailureDuringPublication,
     save_validation_state,
 )
+from zds.utils import get_current_user
 from zds.utils.models import SubCategory, get_hat_from_settings
 from zds.utils.mps import send_mp, send_message_mp
 
@@ -625,4 +626,5 @@ class ActivateJSFiddleInContent(LoginRequiredMixin, PermissionRequiredMixin, For
         if not content.load_version().requires_validation():
             raise PermissionDenied
         content.update(js_support=form.cleaned_data["js_support"])
+        signals.jsfiddle_modified.send(sender=self.__class__, performer=get_current_user(), content=content)
         return redirect(content.load_version().get_absolute_url())
