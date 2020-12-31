@@ -7,6 +7,8 @@ from zds.member.decorator import LoggedWithReadWriteHability
 from zds.tutorialv2.forms import RemoveSuggestionForm, EditContentTagsForm
 from zds.tutorialv2.mixins import SingleContentFormViewMixin
 from zds.tutorialv2.models.database import ContentSuggestion, PublishableContent
+import zds.tutorialv2.signals as signals
+from zds.utils import get_current_user
 
 
 class RemoveSuggestion(LoggedWithReadWriteHability, SingleContentFormViewMixin):
@@ -116,4 +118,5 @@ class EditContentTags(LoggedWithReadWriteHability, SingleContentFormViewMixin):
         self.object.add_tags(form.cleaned_data["tags"].split(","))
         self.object.save()
         messages.success(self.request, EditContentTags.success_message)
+        signals.tags_modified.send(sender=self.__class__, performer=get_current_user(), content=self.object)
         return redirect(form.previous_page_url)

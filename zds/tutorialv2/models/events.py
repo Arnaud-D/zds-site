@@ -8,6 +8,7 @@ from zds.tutorialv2.models.database import PublishableContent
 from zds.tutorialv2 import signals
 from zds.tutorialv2.views.authors import AddAuthorToContent, RemoveAuthorFromContent
 from zds.tutorialv2.views.beta import ManageBetaContent
+from zds.tutorialv2.views.editorialization import EditContentTags
 from zds.tutorialv2.views.validations_contents import (
     ReserveValidation,
     AskValidationForContent,
@@ -53,6 +54,8 @@ types = {
     signals.validation_revoked: "validation_revoked",
     signals.validation_reserved: "validation_reserved",
     signals.validation_unreserved: "validation_unreserved",
+    # Tag management
+    signals.tags_modified: "tags_modified",
 }
 
 
@@ -141,18 +144,6 @@ def describe_beta_activated(event):
     )
 
 
-def describe_validation_reserved(event):
-    return _('<a href="{}">{}</a> a réservé le contenu pour validation.').format(
-        reverse("member-detail", args=[event.performer.username]), event.performer
-    )
-
-
-def describe_validation_unreserved(event):
-    return _('<a href="{}">{}</a> a annulé la réservation du contenu pour validation.').format(
-        reverse("member-detail", args=[event.performer.username]), event.performer
-    )
-
-
 def describe_validation_requested(event):
     return _('<a href="{}">{}</a> a demandé la validation d\'une <a href="{}">version du contenu</a>.').format(
         reverse("member-detail", args=[event.performer.username]),
@@ -185,6 +176,24 @@ def describe_validation_revoked(event):
     )
 
 
+def describe_validation_reserved(event):
+    return _('<a href="{}">{}</a> a réservé le contenu pour validation.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
+def describe_validation_unreserved(event):
+    return _('<a href="{}">{}</a> a annulé la réservation du contenu pour validation.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
+def describe_tags_modified(event):
+    return _('<a href="{}">{}</a> a modifié les tags du contenu.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
 # Map event types to descriptors
 descriptors = {
     "author_added": describe_author_added,
@@ -200,6 +209,7 @@ descriptors = {
     "validation_revoked": describe_validation_revoked,
     "validation_reserved": describe_validation_reserved,
     "validation_unreserved": describe_validation_unreserved,
+    "tags_modified": describe_tags_modified,
 }
 
 
@@ -209,6 +219,7 @@ descriptors = {
 @receiver(signals.beta_activated, sender=ManageBetaContent)
 @receiver(signals.beta_deactivated, sender=ManageBetaContent)
 def record_event_beta_management(sender, performer, signal, content, version, **_):
+    print("Is beta management called?")
     Event(
         performer=performer,
         type=types[signal],
@@ -252,4 +263,13 @@ def record_event_validation_management(sender, performer, signal, content, versi
         type=types[signal],
         content=content,
         version=version,
+    ).save()
+
+
+@receiver(signals.tags_modified, sender=EditContentTags)
+def record_event_tags_management(sender, performer, signal, content, **_):
+    Event(
+        performer=performer,
+        type=types[signal],
+        content=content,
     ).save()

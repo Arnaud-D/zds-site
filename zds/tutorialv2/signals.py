@@ -31,3 +31,7 @@ validation_rejected = Signal()
 validation_revoked = Signal()
 validation_reserved = Signal()
 validation_unreserved = Signal()
+
+# Tags management
+# For the signals below, the arguments "performer" and "content"  shall be provided.
+tags_modified = Signal()
