@@ -9,6 +9,7 @@ from zds.tutorialv2 import signals
 from zds.tutorialv2.views.authors import AddAuthorToContent, RemoveAuthorFromContent
 from zds.tutorialv2.views.beta import ManageBetaContent
 from zds.tutorialv2.views.editorialization import EditContentTags, AddSuggestion, RemoveSuggestion
+from zds.tutorialv2.views.help import ChangeHelp
 from zds.tutorialv2.views.validations_contents import (
     ReserveValidation,
     AskValidationForContent,
@@ -56,6 +57,11 @@ types = {
     signals.validation_unreserved: "validation_unreserved",
     # Tag management
     signals.tags_modified: "tags_modified",
+    # Suggestion managnement
+    signals.suggestion_added: "suggestion_added",
+    signals.suggestion_removed: "suggestion_removed",
+    # Help management
+    signals.help_modified: "help_modified",
 }
 
 
@@ -206,6 +212,12 @@ def describe_suggestion_removed(event):
     )
 
 
+def describe_help_modified(event):
+    return _('<a href="{}">{}</a> a modifié les demandes d\'aide.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
 # Map event types to descriptors
 descriptors = {
     "author_added": describe_author_added,
@@ -224,6 +236,7 @@ descriptors = {
     "tags_modified": describe_tags_modified,
     "suggestion_added": describe_suggestion_added,
     "suggestion_removed": describe_suggestion_removed,
+    "help_modified": describe_help_modified,
 }
 
 
@@ -291,6 +304,15 @@ def record_event_tags_management(sender, performer, signal, content, **_):
 @receiver(signals.suggestion_added, sender=AddSuggestion)
 @receiver(signals.suggestion_removed, sender=RemoveSuggestion)
 def record_event_suggestion_management(sender, performer, signal, content, **_):
+    Event(
+        performer=performer,
+        type=types[signal],
+        content=content,
+    ).save()
+
+
+@receiver(signals.help_modified, sender=ChangeHelp)
+def record_help_management(sender, performer, signal, content, **_):
     Event(
         performer=performer,
         type=types[signal],

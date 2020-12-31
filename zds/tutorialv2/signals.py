@@ -40,3 +40,7 @@ tags_modified = Signal()
 # For the signals below, the arguments "performer" and "content"  shall be provided.
 suggestion_added = Signal()
 suggestion_removed = Signal()
+
+# Help management
+# For the signal below, the arguments "performer" and "content"  shall be provided.
+help_modified = Signal()
