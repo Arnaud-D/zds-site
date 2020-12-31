@@ -7,7 +7,7 @@
 
 {% block title %}
     {% blocktrans with title=content.title %}
-        Historique de "{{ title }}"
+        Journal des événements de "{{ title }}"
     {% endblocktrans %}
 {% endblock %}
 
@@ -15,7 +15,7 @@
 
 {% block breadcrumb %}
     <li><a href="{{ content.get_absolute_url }}">{{ content.title }}</a></li>
-    <li>{% trans "Historique des événements" %}</li>
+    <li>{% trans "Journal des événements" %}</li>
 {% endblock %}
 
 
@@ -32,7 +32,7 @@
             <img src="{{ content.image.physical.tutorial_illu.url }}" alt="">
         {% endif %}
         {% blocktrans with title=content.title %}
-            Historique de "{{ title }}"
+            Journal des événements de "{{ title }}"
         {% endblocktrans %}
     </h1>
 
@@ -48,23 +48,27 @@
 
 
 {% block content %}
-    {% include "misc/paginator.html" with position="top" %}
+    {% if events %}
+        {% include "misc/paginator.html" with position="top" %}
 
-    <table class="fullwidth commits-list">
-        <thead>
-            <tr>
-                <th width="20%">{% trans "Date" %}</th>
-                <th>{% trans "Description" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for e in events %}
+        <table class="fullwidth commits-list">
+            <thead>
                 <tr>
-                    <td>{{ e.date | format_date:True }}</td>
-                    <td>{{ e.description | safe }}</td>
+                    <th width="20%">{% trans "Date" %}</th>
+                    <th>{% trans "Description" %}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% include "misc/paginator.html" with position="bottom" %}
+            </thead>
+            <tbody>
+                {% for e in events %}
+                    <tr>
+                        <td>{{ e.date | format_date:True }}</td>
+                        <td>{{ e.description | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include "misc/paginator.html" with position="bottom" %}
+    {% else %}
+        <p>{% trans "Aucun événement n'a été enregistré pour ce contenu." %}</p>
+    {% endif %}
 {% endblock %}
