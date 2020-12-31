@@ -192,6 +192,6 @@ urlpatterns = [
     # tags
     re_path(r"^tags/$", TagsListView.as_view(), name="tags"),
     re_path(r"^$", RedirectView.as_view(pattern_name="publication:list", permanent=True), name="list"),
-    # List of events
-    re_path(r"^events/(?P<pk>\d+)/$", EventList.as_view(), name="events"),
+    # Journal of events
+    re_path(r"^evenements/(?P<pk>\d+)/$", EventList.as_view(), name="events"),
 ]
