@@ -26,7 +26,7 @@ class RemoveSuggestion(LoggedWithReadWriteHability, SingleContentFormViewMixin):
 
         content_suggestion = get_object_or_404(ContentSuggestion, pk=form.cleaned_data["pk_suggestion"])
         content_suggestion.delete()
-
+        signals.suggestion_removed.send(sender=self.__class__, performer=self.request.user, content=self.object)
         messages.success(
             self.request,
             _('Vous avez enlevé "{}" de la liste des suggestions de {}.').format(
@@ -90,6 +90,9 @@ class AddSuggestion(LoggedWithReadWriteHability, SingleContentFormViewMixin):
                 else:
                     obj_suggestion = ContentSuggestion(publication=publication, suggestion=suggestion)
                     obj_suggestion.save()
+                    signals.suggestion_added.send(
+                        sender=self.__class__, performer=self.request.user, content=self.object
+                    )
                     messages.info(
                         self.request,
                         _('Le contenu "{}" a été ajouté dans les suggestions de {}'.format(suggestion.title, _type)),

@@ -33,5 +33,10 @@ validation_reserved = Signal()
 validation_unreserved = Signal()
 
 # Tags management
-# For the signals below, the arguments "performer" and "content"  shall be provided.
+# For the signal below, the arguments "performer" and "content"  shall be provided.
 tags_modified = Signal()
+
+# Suggestion management
+# For the signals below, the arguments "performer" and "content"  shall be provided.
+suggestion_added = Signal()
+suggestion_removed = Signal()

@@ -8,7 +8,7 @@ from zds.tutorialv2.models.database import PublishableContent
 from zds.tutorialv2 import signals
 from zds.tutorialv2.views.authors import AddAuthorToContent, RemoveAuthorFromContent
 from zds.tutorialv2.views.beta import ManageBetaContent
-from zds.tutorialv2.views.editorialization import EditContentTags
+from zds.tutorialv2.views.editorialization import EditContentTags, AddSuggestion, RemoveSuggestion
 from zds.tutorialv2.views.validations_contents import (
     ReserveValidation,
     AskValidationForContent,
@@ -194,6 +194,18 @@ def describe_tags_modified(event):
     )
 
 
+def describe_suggestion_added(event):
+    return _('<a href="{}">{}</a> a ajouté une suggestion de contenu.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
+def describe_suggestion_removed(event):
+    return _('<a href="{}">{}</a> a supprimé une suggestion de contenu.').format(
+        reverse("member-detail", args=[event.performer.username]), event.performer
+    )
+
+
 # Map event types to descriptors
 descriptors = {
     "author_added": describe_author_added,
@@ -210,6 +222,8 @@ descriptors = {
     "validation_reserved": describe_validation_reserved,
     "validation_unreserved": describe_validation_unreserved,
     "tags_modified": describe_tags_modified,
+    "suggestion_added": describe_suggestion_added,
+    "suggestion_removed": describe_suggestion_removed,
 }
 
 
@@ -219,7 +233,6 @@ descriptors = {
 @receiver(signals.beta_activated, sender=ManageBetaContent)
 @receiver(signals.beta_deactivated, sender=ManageBetaContent)
 def record_event_beta_management(sender, performer, signal, content, version, **_):
-    print("Is beta management called?")
     Event(
         performer=performer,
         type=types[signal],
@@ -268,6 +281,16 @@ def record_event_validation_management(sender, performer, signal, content, versi
 
 @receiver(signals.tags_modified, sender=EditContentTags)
 def record_event_tags_management(sender, performer, signal, content, **_):
+    Event(
+        performer=performer,
+        type=types[signal],
+        content=content,
+    ).save()
+
+
+@receiver(signals.suggestion_added, sender=AddSuggestion)
+@receiver(signals.suggestion_removed, sender=RemoveSuggestion)
+def record_event_suggestion_management(sender, performer, signal, content, **_):
     Event(
         performer=performer,
         type=types[signal],
