@@ -380,32 +380,6 @@ to the <cite>is_granted</cite> parameter.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="zds.utils.models.HelpWriting">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">zds.utils.models.</span></span><span class="sig-name descname"><span class="pre">HelpWriting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.models.HelpWriting" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Tutorial Help</p>
-<dl class="py exception">
-<dt class="sig sig-object py" id="zds.utils.models.HelpWriting.DoesNotExist">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#zds.utils.models.HelpWriting.DoesNotExist" title="Lien permanent vers cette définition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="zds.utils.models.HelpWriting.MultipleObjectsReturned">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#zds.utils.models.HelpWriting.MultipleObjectsReturned" title="Lien permanent vers cette définition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="zds.utils.models.HelpWriting.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.models.HelpWriting.save" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Save the current instance. Override this in a subclass if you want to
-control the saving process.</p>
-<p>The “force_insert” and “force_update” parameters can be used to insist
-that the « save » must be an SQL insert or update (or equivalent for
-non-SQL backends), respectively. Normally, they should not be set.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="zds.utils.models.Licence">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">zds.utils.models.</span></span><span class="sig-name descname"><span class="pre">Licence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.models.Licence" title="Lien permanent vers cette définition"></a></dt>
 <dd><p>Publication licence.</p>
@@ -561,6 +535,26 @@ Hat requests for this hat are also canceled.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="zds.utils.forms.PasswordRequiredForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">zds.utils.forms.</span></span><span class="sig-name descname"><span class="pre">PasswordRequiredForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.forms.PasswordRequiredForm" title="Lien permanent vers cette définition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="zds.utils.forms.PasswordRequiredForm.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.forms.PasswordRequiredForm.clean" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named “__all__”.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="zds.utils.forms.PasswordRequiredForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#zds.utils.forms.PasswordRequiredForm.media" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="zds.utils.forms.TagValidator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">zds.utils.forms.</span></span><span class="sig-name descname"><span class="pre">TagValidator</span></span><a class="headerlink" href="#zds.utils.forms.TagValidator" title="Lien permanent vers cette définition"></a></dt>
 <dd><p>validate tags</p>
@@ -639,6 +633,13 @@ Hat requests for this hat are also canceled.</p>
 </section>
 <section id="module-zds.utils.misc">
 <span id="autres-misc-py"></span><h2><a class="toc-backref" href="#id5">Autres (<code class="docutils literal notranslate"><span class="pre">misc.py</span></code>)</a><a class="headerlink" href="#module-zds.utils.misc" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="zds.utils.misc.check_essential_accounts">
+<span class="sig-prename descclassname"><span class="pre">zds.utils.misc.</span></span><span class="sig-name descname"><span class="pre">check_essential_accounts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.misc.check_essential_accounts" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Verify that essential accounts are present in the database.
+Raise an exception if it not the case.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="zds.utils.misc.compute_hash">
 <span class="sig-prename descclassname"><span class="pre">zds.utils.misc.</span></span><span class="sig-name descname"><span class="pre">compute_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#zds.utils.misc.compute_hash" title="Lien permanent vers cette définition"></a></dt>
