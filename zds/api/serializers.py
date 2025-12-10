@@ -14,7 +14,7 @@ class ZdSModelSerializer(serializers.ModelSerializer):
         if expands:
             fields = self._update_expand_fields(fields, expands)
 
-        x_data_format = request.META.get("HTTP_X_DATA_FORMAT") or "Markdown"
+        x_data_format = request.headers.get("x-data-format") or "Markdown"
         if hasattr(self.Meta, "formats"):
             fields = self._update_format_fields(fields, x_data_format)
 

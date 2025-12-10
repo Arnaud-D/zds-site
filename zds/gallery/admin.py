@@ -3,6 +3,7 @@ from django.contrib import admin
 from zds.gallery.models import Gallery, Image, UserGallery
 
 
+@admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
     """Representation of Gallery model in the admin interface."""
 
@@ -11,6 +12,7 @@ class GalleryAdmin(admin.ModelAdmin):
     search_fields = ("title", "subtitle")
 
 
+@admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
     """Representation of Image model in the admin interface."""
 
@@ -20,6 +22,7 @@ class ImageAdmin(admin.ModelAdmin):
     search_fields = ("title", "legend", "gallery__title")
 
 
+@admin.register(UserGallery)
 class UserGalleryAdmin(admin.ModelAdmin):
     """Representation of UserGallery model in the admin interface."""
 
@@ -27,8 +30,3 @@ class UserGalleryAdmin(admin.ModelAdmin):
     list_filter = ("mode",)
     raw_id_fields = ("user", "gallery")
     search_fields = ("user__username", "gallery__title")
-
-
-admin.site.register(Gallery, GalleryAdmin)
-admin.site.register(Image, ImageAdmin)
-admin.site.register(UserGallery, UserGalleryAdmin)

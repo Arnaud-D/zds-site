@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import path, re_path
 
 from .views import (
     GalleryDetailView,
@@ -10,7 +10,7 @@ from .views import (
 )
 
 urlpatterns = [
-    re_path(r"^$", GalleryListView.as_view(), name="list"),
+    path("", GalleryListView.as_view(), name="list"),
     re_path(r"^(?P<pk>[0-9]+)/?$", GalleryDetailView.as_view(), name="detail"),
     re_path(r"^(?P<pk_gallery>[0-9]+)/images/?$", ImageListView.as_view(), name="list-images"),
     re_path(r"^(?P<pk_gallery>[0-9]+)/images/(?P<pk>[0-9]+)?$", ImageDetailView.as_view(), name="detail-image"),

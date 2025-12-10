@@ -76,9 +76,9 @@ class MatomoMiddleware:
         return self.process_response(request, self.get_response(request))
 
     def matomo_track(self, request, search_data=None):
-        client_user_agent = request.META.get("HTTP_USER_AGENT", "")
-        client_referer = request.META.get("HTTP_REFERER", "")
-        client_accept_language = request.META.get("HTTP_ACCEPT_LANGUAGE", "")
+        client_user_agent = request.headers.get("user-agent", "")
+        client_referer = request.headers.get("referer", "")
+        client_accept_language = request.headers.get("accept-language", "")
         client_url = f"{request.scheme}://{request.get_host()}{request.path}"
         if settings.ZDS_APP["site"]["matomo_tracking_enabled"]:
             tracking_params = {

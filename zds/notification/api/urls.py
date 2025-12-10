@@ -1,7 +1,7 @@
-from django.urls import re_path
+from django.urls import path
 
 from zds.notification.api.views import NotificationListAPI
 
 urlpatterns = [
-    re_path(r"^$", NotificationListAPI.as_view(), name="list"),
+    path("", NotificationListAPI.as_view(), name="list"),
 ]

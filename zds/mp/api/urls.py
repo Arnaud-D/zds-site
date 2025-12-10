@@ -10,16 +10,16 @@ from zds.mp.api.views import (
 )
 
 urlpatterns = [
-    re_path(r"^$", PrivateTopicListAPI.as_view(), name="list"),
+    path("", PrivateTopicListAPI.as_view(), name="list"),
     re_path(r"^(?P<pk>[0-9]+)/?$", PrivateTopicDetailAPI.as_view(), name="detail"),
-    re_path(r"^(?P<pk_ptopic>[0-9]+)/messages/$", PrivatePostListAPI.as_view(), name="message-list"),
+    path("<int:pk_ptopic>/messages/", PrivatePostListAPI.as_view(), name="message-list"),
     re_path(
         r"^(?P<pk_ptopic>[0-9]+)/messages/(?P<pk>[0-9]+)/?$", PrivatePostDetailAPI.as_view(), name="message-detail"
     ),
-    re_path(
-        r"^(?P<pk_ptopic>[0-9]+)/messages/(?P<pk>[0-9]+)/karma/$",
+    path(
+        "<int:pk_ptopic>/messages/<int:pk>/karma/",
         PrivatePostReactionKarmaView.as_view(),
         name="mp-reaction-karma",
     ),
-    re_path(r"^unread/$", PrivateTopicReadAPI.as_view(), name="list-unread"),
+    path("unread/", PrivateTopicReadAPI.as_view(), name="list-unread"),
 ]

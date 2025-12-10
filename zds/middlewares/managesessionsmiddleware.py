@@ -22,6 +22,6 @@ class ManageSessionsMiddleware:
         if user is not None and user.is_authenticated:
             session = request.session
             session["ip_address"] = get_client_ip(request)
-            session["user_agent"] = request.META.get("HTTP_USER_AGENT", "")
+            session["user_agent"] = request.headers.get("user-agent", "")
             session["last_visit"] = datetime.now().timestamp()
         return response

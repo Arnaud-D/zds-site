@@ -64,4 +64,4 @@ class FollowNewContent(LoggedWithReadWriteHability, FormView):
 
         if is_ajax(self.request):
             return HttpResponse(json_handler.dumps(response), content_type="application/json")
-        return redirect(request.META.get("HTTP_REFERER"))
+        return redirect(request.headers.get("referer"))

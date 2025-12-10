@@ -3,6 +3,7 @@ from django.contrib import admin
 from zds.notification.models import Notification, Subscription
 
 
+@admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
     """Representation of Notification model in the admin interface."""
 
@@ -12,6 +13,7 @@ class NotificationAdmin(admin.ModelAdmin):
     raw_id_fields = ("subscription", "sender")
 
 
+@admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     """Representation of Subscription model in the admin interface."""
 
@@ -19,7 +21,3 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_filter = ("is_active", "by_email")
     search_fields = ("user__username",)
     raw_id_fields = ("user", "last_notification")
-
-
-admin.site.register(Notification, NotificationAdmin)
-admin.site.register(Subscription, SubscriptionAdmin)

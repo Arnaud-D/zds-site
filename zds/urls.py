@@ -82,10 +82,10 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    re_path(r"^", include("zds.tutorialv2.urls")),
+    path("", include("zds.tutorialv2.urls")),
     path("forums/", include("zds.forum.urls")),
     path("mp/", include("zds.mp.urls")),
-    re_path(r"^membres/", include("zds.member.urls")),
+    path("membres/", include("zds.member.urls")),
     re_path(r"^admin/", admin.site.urls),
     path("pages/", include("zds.pages.urls")),
     path("galerie/", include("zds.gallery.urls")),
@@ -94,17 +94,17 @@ urlpatterns = [
     path("mise-en-avant/", include("zds.featured.urls")),
     path("notifications/", include("zds.notification.urls")),
     path("", include(("social_django.urls", "social_django"), namespace="social")),
-    re_path(r"^$", home_view, name="homepage"),
-    re_path(r"^api/", include(("zds.api.urls", "zds.api"), namespace="api")),
-    re_path(r"^oauth2/", include(("oauth2_provider.urls", "oauth2_provider"), namespace="oauth2_provider")),
+    path("", home_view, name="homepage"),
+    path("api/", include(("zds.api.urls", "zds.api"), namespace="api")),
+    path("oauth2/", include(("oauth2_provider.urls", "oauth2_provider"), namespace="oauth2_provider")),
     path("@<str:user_name>", MemberDetail.as_view(), name="member-detail"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # SiteMap URLs
 urlpatterns += [
-    re_path(r"^sitemap\.xml$", index_view, {"sitemaps": sitemaps}),
-    re_path(
-        r"^sitemap-(?P<section>.+)\.xml$",
+    path("sitemap.xml", index_view, {"sitemaps": sitemaps}),
+    path(
+        "sitemap-<path:section>.xml",
         sitemap_view,
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
@@ -117,7 +117,7 @@ if settings.DEBUG:
     from django.contrib.staticfiles.views import serve
 
     urlpatterns += [
-        re_path(r"^__debug__/", include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
     ]
     urlpatterns += static(settings.STATIC_URL, view=serve)
 

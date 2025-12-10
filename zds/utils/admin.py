@@ -13,6 +13,7 @@ from zds.utils.models import (
 )
 
 
+@admin.register(SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
     def parent_category(self, obj):
         return obj.get_parent_category()
@@ -24,6 +25,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
     ordering = ("categorysubcategory__category", "position", "title")
 
 
+@admin.register(Alert)
 class AlertAdmin(admin.ModelAdmin):
     list_display = ("author", "scope", "text", "pubdate", "solved", "solved_date")
     list_filter = ("scope", "solved")
@@ -32,6 +34,7 @@ class AlertAdmin(admin.ModelAdmin):
     search_fields = ("author__username", "text")
 
 
+@admin.register(CommentEdit)
 class CommentEditAdmin(admin.ModelAdmin):
     list_display = ("editor", "date")
     raw_id_fields = ("comment", "editor", "deleted_by")
@@ -40,12 +43,14 @@ class CommentEditAdmin(admin.ModelAdmin):
     search_fields = ("editor__username", "original_text")
 
 
+@admin.register(Hat)
 class HatAdmin(admin.ModelAdmin):
     list_display = ("name", "group", "is_staff")
     list_filter = ("group", "is_staff")
     search_fields = ("name",)
 
 
+@admin.register(HatRequest)
 class HatRequestAdmin(admin.ModelAdmin):
     list_display = ("user", "hat", "date")
     ordering = ("-date",)
@@ -53,12 +58,7 @@ class HatRequestAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "hat")
 
 
-admin.site.register(Alert, AlertAdmin)
 admin.site.register(Tag)
 admin.site.register(Licence)
 admin.site.register(Category)
-admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(CategorySubCategory)
-admin.site.register(CommentEdit, CommentEditAdmin)
-admin.site.register(Hat, HatAdmin)
-admin.site.register(HatRequest, HatRequestAdmin)

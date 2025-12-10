@@ -3,6 +3,7 @@ from django.contrib import admin
 from zds.forum.models import Forum, ForumCategory, Post, Topic, TopicRead
 
 
+@admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "forum", "pubdate")
     list_filter = ("is_locked", "is_sticky")
@@ -11,12 +12,14 @@ class TopicAdmin(admin.ModelAdmin):
     search_fields = ("author__username", "title", "subtitle", "github_issue")
 
 
+@admin.register(TopicRead)
 class TopicReadAdmin(admin.ModelAdmin):
     list_display = ("topic", "user")
     raw_id_fields = ("topic", "post", "user")
     search_fields = ("topic__title", "user__username")
 
 
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ("topic", "author", "ip_address", "pubdate", "is_visible")
     list_filter = ("is_visible",)
@@ -27,6 +30,3 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(ForumCategory)
 admin.site.register(Forum)
-admin.site.register(Post, PostAdmin)
-admin.site.register(Topic, TopicAdmin)
-admin.site.register(TopicRead, TopicReadAdmin)

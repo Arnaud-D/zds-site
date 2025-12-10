@@ -12,6 +12,7 @@ from zds.member.models import (
 )
 
 
+@admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     """Representation of Profile model in the admin interface."""
 
@@ -22,6 +23,7 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "sign", "site", "avatar_url", "biography", "last_ip_address")
 
 
+@admin.register(Ban)
 class BanAdmin(admin.ModelAdmin):
     """Representation of Ban model in the admin interface."""
 
@@ -32,6 +34,7 @@ class BanAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "note")
 
 
+@admin.register(TokenRegister)
 class TokenRegisterAdmin(admin.ModelAdmin):
     """Representation of TokenRegister model in the admin interface."""
 
@@ -40,6 +43,7 @@ class TokenRegisterAdmin(admin.ModelAdmin):
     raw_id_fields = ("user",)
 
 
+@admin.register(TokenForgotPassword)
 class TokenForgotPasswordAdmin(admin.ModelAdmin):
     """Representation of TokenForgotPassword model in the admin interface."""
 
@@ -48,6 +52,7 @@ class TokenForgotPasswordAdmin(admin.ModelAdmin):
     raw_id_fields = ("user",)
 
 
+@admin.register(KarmaNote)
 class KarmaNoteAdmin(admin.ModelAdmin):
     """Representation of KarmaNote model in the admin interface."""
 
@@ -57,6 +62,7 @@ class KarmaNoteAdmin(admin.ModelAdmin):
     raw_id_fields = ("user", "moderator")
 
 
+@admin.register(NewEmailProvider)
 class NewEmailProviderAdmin(admin.ModelAdmin):
     """Representation of NewEmailProvider model in the admin interface."""
 
@@ -67,6 +73,7 @@ class NewEmailProviderAdmin(admin.ModelAdmin):
     raw_id_fields = ("user",)
 
 
+@admin.register(BannedEmailProvider)
 class BannedEmailProviderAdmin(admin.ModelAdmin):
     """Representation of BannedEmailProvider model in the admin interface."""
 
@@ -76,6 +83,7 @@ class BannedEmailProviderAdmin(admin.ModelAdmin):
     raw_id_fields = ("moderator",)
 
 
+@admin.register(BlockedIP)
 class BlockedIPAdmin(admin.ModelAdmin):
     """Representation of BlockedIP model in the admin interface"""
 
@@ -83,13 +91,3 @@ class BlockedIPAdmin(admin.ModelAdmin):
     ordering = ("-blocked_date",)
     search_fields = ("ip_address", "moderator")
     raw_id_fields = ("moderator",)
-
-
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Ban, BanAdmin)
-admin.site.register(TokenRegister, TokenRegisterAdmin)
-admin.site.register(TokenForgotPassword, TokenForgotPasswordAdmin)
-admin.site.register(KarmaNote, KarmaNoteAdmin)
-admin.site.register(NewEmailProvider, NewEmailProviderAdmin)
-admin.site.register(BannedEmailProvider, BannedEmailProviderAdmin)
-admin.site.register(BlockedIP, BlockedIPAdmin)

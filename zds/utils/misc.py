@@ -104,4 +104,4 @@ def is_ajax(request: HttpRequest):
 
     The function replaces `request.is_ajax()`, which is removed starting from Django 4.0.
     """
-    return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
+    return request.headers.get("x-requested-with") == "XMLHttpRequest"

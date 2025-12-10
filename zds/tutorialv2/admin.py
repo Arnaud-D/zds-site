@@ -17,6 +17,7 @@ from zds.tutorialv2.models.help_requests import HelpWriting
 from zds.tutorialv2.models.labels import Label
 
 
+@admin.register(PublishableContent)
 class PublishableContentAdmin(admin.ModelAdmin):
     list_display = ("type", "title", "creation_date", "update_date", "is_obsolete")
     list_filter = ("type", "licence", "is_locked", "js_support", "is_obsolete")
@@ -34,6 +35,7 @@ class PublishableContentAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(PublishedContent)
 class PublishedContentAdmin(admin.ModelAdmin):
     list_display = ("content", "content_type", "publication_date", "update_date")
     list_filter = (
@@ -57,6 +59,7 @@ class PublishedContentAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(ContentReaction)
 class ContentReactionAdmin(admin.ModelAdmin):
     list_display = ("related_content", "author", "ip_address", "pubdate", "is_visible")
     list_filter = ("related_content__type", "is_visible")
@@ -65,6 +68,7 @@ class ContentReactionAdmin(admin.ModelAdmin):
     search_fields = ("author__username", "text", "text_hidden", "ip_address")
 
 
+@admin.register(Validation)
 class ValidationAdmin(admin.ModelAdmin):
     list_display = ("content", "date_proposition", "validator", "status")
     list_filter = (
@@ -89,6 +93,7 @@ class ValidationAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(PickListOperation)
 class PickListOperationAdmin(admin.ModelAdmin):
     list_display = ("content", "operation", "staff_user", "operation_date", "is_effective")
     list_filter = ("is_effective",)
@@ -97,46 +102,41 @@ class PickListOperationAdmin(admin.ModelAdmin):
     search_fields = ("content__title", "version")
 
 
+@admin.register(ContentRead)
 class ContentReadAdmin(admin.ModelAdmin):
     list_display = ("content", "user")
     raw_id_fields = ("content", "note", "user")
     search_fields = ("content__title", "user__username")
 
 
+@admin.register(PublicationEvent)
 class PublicationEventAdmin(admin.ModelAdmin):
     list_display = ("published_object", "date", "state_of_processing", "format_requested")
     ordering = ("published_object", "date", "state_of_processing")
     search_fields = ("state_of_processing", "published_object__title", "date")
 
 
+@admin.register(ContentContributionRole)
 class ContentReviewTypeAdmin(admin.ModelAdmin):
     list_display = ["title"]
     search_fields = ["title"]
     ordering = ["position"]
 
 
+@admin.register(Goal)
 class GoalAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     ordering = ["position"]
     prepopulated_fields = {"slug": ("name",)}
 
 
+@admin.register(Label)
 class LabelAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     ordering = ["name"]
     prepopulated_fields = {"slug": ("name",)}
 
 
-admin.site.register(PublishableContent, PublishableContentAdmin)
-admin.site.register(PublishedContent, PublishedContentAdmin)
-admin.site.register(Validation, ValidationAdmin)
-admin.site.register(ContentReaction, ContentReactionAdmin)
-admin.site.register(PickListOperation, PickListOperationAdmin)
-admin.site.register(ContentRead, ContentReadAdmin)
-admin.site.register(PublicationEvent, PublicationEventAdmin)
-admin.site.register(ContentContributionRole, ContentReviewTypeAdmin)
 admin.site.register(HelpWriting)
 admin.site.register(Event)
-admin.site.register(Goal, GoalAdmin)
-admin.site.register(Label, LabelAdmin)
 admin.site.register(ContentSuggestion)

@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import path, re_path
 
 from zds.member.api.views import (
     MemberDetailAPI,
@@ -10,7 +10,7 @@ from zds.member.api.views import (
 )
 
 urlpatterns = [
-    re_path(r"^$", MemberListAPI.as_view(), name="list"),
+    path("", MemberListAPI.as_view(), name="list"),
     re_path(r"^exists/?$", MemberExistsAPI.as_view(), name="exists"),
     re_path(r"^mon-profil/?$", MemberMyDetailAPI.as_view(), name="profile"),
     re_path(r"^(?P<user__id>[0-9]+)/?$", MemberDetailAPI.as_view(), name="detail"),

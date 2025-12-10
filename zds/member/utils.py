@@ -101,8 +101,8 @@ def get_info_from_user_agent(user_agent):
 def get_client_ip(request):
     """Retrieve the real IP address of the client."""
 
-    if "HTTP_X_REAL_IP" in request.META:  # nginx
-        return request.META.get("HTTP_X_REAL_IP")
+    if "x-real-ip" in request.headers:  # nginx
+        return request.headers.get("x-real-ip")
     elif "REMOTE_ADDR" in request.META:
         # other
         return request.META.get("REMOTE_ADDR")
